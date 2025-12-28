@@ -1,6 +1,3 @@
-Here is a comprehensive `README.md` file tailored to the functionality of your script (v16.6).
-
-```markdown
 # Aisle Offer Filter & Auto-Claimer
 
 A powerful Tampermonkey UserScript to enhance the **Aisle** (discover.gotoaisle.com) experience. This tool allows for advanced filtering of offers, automated claiming, location scraping, and detailed history tracking.
@@ -65,5 +62,3 @@ A powerful Tampermonkey UserScript to enhance the **Aisle** (discover.gotoaisle.
 ## ⚠️ Disclaimer
 
 This script is for educational and personal productivity purposes only. Use `Batch Claim` mode responsibly. The author is not affiliated with Aisle.
-
-```
