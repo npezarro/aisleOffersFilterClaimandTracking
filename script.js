@@ -709,13 +709,33 @@
         history.forEach(item => {
             const tr = document.createElement('tr');
             const locs = item.locations || "N/A";
-            tr.innerHTML = `
-                <td>${item.date}</td>
-                <td><strong>${item.brand}</strong></td>
-                <td>${item.product}</td>
-                <td><span style="background:#F4F4FE; color:#4C48FF; padding:2px 6px; border-radius:4px; font-size:12px; font-weight:600;">${item.offer}</span></td>
-                <td class="aisle-loc-cell">${locs}</td>
-            `;
+
+            const tdDate = document.createElement('td');
+            tdDate.textContent = item.date;
+
+            const tdBrand = document.createElement('td');
+            const brandStrong = document.createElement('strong');
+            brandStrong.textContent = item.brand;
+            tdBrand.appendChild(brandStrong);
+
+            const tdProduct = document.createElement('td');
+            tdProduct.textContent = item.product;
+
+            const tdOffer = document.createElement('td');
+            const offerSpan = document.createElement('span');
+            offerSpan.textContent = item.offer;
+            offerSpan.style.cssText = 'background:#F4F4FE; color:#4C48FF; padding:2px 6px; border-radius:4px; font-size:12px; font-weight:600;';
+            tdOffer.appendChild(offerSpan);
+
+            const tdLoc = document.createElement('td');
+            tdLoc.className = 'aisle-loc-cell';
+            tdLoc.textContent = locs;
+
+            tr.appendChild(tdDate);
+            tr.appendChild(tdBrand);
+            tr.appendChild(tdProduct);
+            tr.appendChild(tdOffer);
+            tr.appendChild(tdLoc);
             tbody.appendChild(tr);
         });
     }
@@ -812,7 +832,13 @@
             const tagEl = document.createElement('div');
             tagEl.className = 'aisle-tag';
             if (draftTags.has(tagName)) tagEl.classList.add('selected');
-            tagEl.innerHTML = `<span>${tagName}</span><span class="aisle-tag-count">${count}</span>`;
+            const tagLabel = document.createElement('span');
+            tagLabel.textContent = tagName;
+            const tagCount = document.createElement('span');
+            tagCount.className = 'aisle-tag-count';
+            tagCount.textContent = count;
+            tagEl.appendChild(tagLabel);
+            tagEl.appendChild(tagCount);
             tagEl.addEventListener('click', () => {
                 if (draftTags.has(tagName)) draftTags.delete(tagName);
                 else draftTags.add(tagName);
