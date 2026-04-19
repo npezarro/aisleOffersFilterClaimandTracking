@@ -1,0 +1,12 @@
+{
+  "name": "aisle-offers-filter",
+  "version": "16.6.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^3.1.1"
+  }
+}
