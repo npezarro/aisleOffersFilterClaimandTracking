@@ -30,3 +30,8 @@ If you cannot fetch `agent.md` from the remote, apply these core rules:
 10. **Dry-run destructive commands.** Use `--dry-run` when available.
 
 For the full ruleset, see `agent.md` in this repository.
+
+## CI
+
+- GitHub Actions workflow (`.github/workflows/ci.yml`) runs `npm test` on pushes and PRs to `main`
+- CI uses Node.js 20
