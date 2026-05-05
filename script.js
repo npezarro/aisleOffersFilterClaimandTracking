@@ -22,7 +22,6 @@
 
     // Auto Claim Selectors
     const CLAIM_PAGE_CHECKBOX_SELECTOR = '#aisle-opted';
-    const CLAIM_SUBMIT_SELECTOR = 'button.bg-brand-500';
 
     // Detail Page Info
     const INFO_BRAND_SELECTOR = 'h4';
