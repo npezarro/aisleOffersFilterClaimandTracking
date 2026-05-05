@@ -33,5 +33,6 @@ For the full ruleset, see `agent.md` in this repository.
 
 ## CI
 
-- GitHub Actions workflow (`.github/workflows/ci.yml`) runs `npm test` on pushes and PRs to `main`
+- GitHub Actions workflow (`.github/workflows/ci.yml`) runs lint + tests on pushes and PRs to `main`
+- Lint: `npm run lint` (ESLint v9 flat config in `eslint.config.js`)
 - CI uses Node.js 20
