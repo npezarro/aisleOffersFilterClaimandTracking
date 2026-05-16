@@ -36,3 +36,8 @@ For the full ruleset, see `agent.md` in this repository.
 - GitHub Actions workflow (`.github/workflows/ci.yml`) runs lint + tests on pushes and PRs to `main`
 - Lint: `npm run lint` (ESLint v9 flat config in `eslint.config.js`)
 - CI uses Node.js 20
+
+## Tampermonkey Standards
+
+- **Auto-Update Headers:** `script.js` must include `@updateURL` and `@downloadURL` in the UserScript header. Bump `@version` on every change so Tampermonkey detects updates.
+- **Debug/Verbose Logging:** Ship with all debug/verbose logging flags **disabled**. Use boolean constants (`const DEBUG = false`) and gate console output behind them. Never commit with debug flags enabled. Existing `console.log` calls should be gated behind a DEBUG constant.
