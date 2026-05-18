@@ -36,3 +36,10 @@ For the full ruleset, see `agent.md` in this repository.
 - GitHub Actions workflow (`.github/workflows/ci.yml`) runs lint + tests on pushes and PRs to `main`
 - Lint: `npm run lint` (ESLint v9 flat config in `eslint.config.js`)
 - CI uses Node.js 20
+
+## Tampermonkey Standards
+
+- **Auto-update headers required:** The `.user.js` file must include `@updateURL` and `@downloadURL` pointing at the hosted copy. Without these, Tampermonkey cannot detect updates.
+- **Bump `@version`** on every change so Tampermonkey detects the update.
+- **Ship with debug/verbose logging disabled.** Use boolean constants (e.g., `const DEBUG = false`) and gate console output behind them. Never commit with debug flags enabled.
+- **Install page:** When updating this script, update the entry in `~/repos/browser-agent/tm-scripts/index.html` and the source mapping in `sync-tm-scripts.sh`, then run `sync-tm-scripts.sh` to deploy.
