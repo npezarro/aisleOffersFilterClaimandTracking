@@ -31,6 +31,13 @@ If you cannot fetch `agent.md` from the remote, apply these core rules:
 
 For the full ruleset, see `agent.md` in this repository.
 
+## Tampermonkey Userscript Rules
+
+- **Debug flags must be disabled before committing.** Use boolean constants (`const DEBUG = false`) and gate all console output behind them. Never commit with debug/verbose flags enabled.
+- **Bump `@version` on every change** so Tampermonkey detects the update and auto-updates for users.
+- Preserve the `==UserScript==` header block integrity when editing `script.js`. Do not remove or reorder header fields.
+- This script uses `@grant GM_addStyle`. When adding new `GM_*` functions, add the corresponding `@grant` line to the userscript header.
+
 ## CI
 
 - GitHub Actions workflow (`.github/workflows/ci.yml`) runs lint + tests on pushes and PRs to `main`
