@@ -42,7 +42,9 @@ For the full ruleset, see `agent.md` in this repository.
 
 - GitHub Actions workflow (`.github/workflows/ci.yml`) runs lint + tests on pushes and PRs to `main`
 - Lint: `npm run lint` (ESLint v9 flat config in `eslint.config.js`)
-- CI uses Node.js 20
+- Run tests locally: `npm test` (Vitest, single run via `vitest run`)
+- **Pin CI to Node.js 22 (current LTS).** Node 20 reached end-of-life on April 30, 2026 — the workflow's `node-version` must be `22`, not `20` or `lts/*` (which can shift unexpectedly).
+- **`package-lock.json` must stay committed** — CI uses `npm ci`, which fails without the lockfile.
 
 ## Tampermonkey Standards
 
