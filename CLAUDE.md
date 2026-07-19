@@ -52,3 +52,13 @@ For the full ruleset, see `agent.md` in this repository.
 - Bump `@version` on every change so Tampermonkey detects the update.
 - Ship with all debug/verbose logging flags disabled. Use boolean constants (`const DEBUG = false`) and gate console output behind them. Never commit `true` to production.
 - Deploy updated scripts via `~/repos/browser-agent/sync-tm-scripts.sh` to sync to VM hosting.
+
+## Testing Practices
+
+The "CI" section above covers how the suite runs. These are the output-affecting practice rules from `agentGuidance/guidance/testing.md`, incorporated here because this repo has a real Vitest suite (`core.test.js`) around the offer filter/claim/tracking logic in `core.js`.
+
+- **Bug fixes get a regression test.** When fixing a filtering, claim, or tracking bug, first add a test that fails without the fix and passes with it — a regression test for the *class* of bug, not just the one instance.
+- **New functions with logic get a unit test** covering the happy path plus edge cases — empty/null/undefined input, boundary conditions (e.g. zero offers, malformed offer objects), and error paths. Config- or copy-only changes need no new test.
+- **Mock at boundaries, not internals.** The boundaries here are the DOM, timers/`Date.now()`, and any network/storage access. Stub those rather than reaching into private state, and reset mocks between tests.
+- **Test the contract, not the implementation.** Assert on the exported filter/claim/tracking behavior of `core.js`, not private variables, jsdom internals, or Vitest itself. Don't test third-party library behavior.
+- **Keep the suite green before every commit.** `npm test` (single run) must pass locally; CI runs the same on push/PR.
