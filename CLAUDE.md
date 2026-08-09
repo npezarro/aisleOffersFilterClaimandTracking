@@ -62,3 +62,28 @@ The "CI" section above covers how the suite runs. These are the output-affecting
 - **Mock at boundaries, not internals.** The boundaries here are the DOM, timers/`Date.now()`, and any network/storage access. Stub those rather than reaching into private state, and reset mocks between tests.
 - **Test the contract, not the implementation.** Assert on the exported filter/claim/tracking behavior of `core.js`, not private variables, jsdom internals, or Vitest itself. Don't test third-party library behavior.
 - **Keep the suite green before every commit.** `npm test` (single run) must pass locally; CI runs the same on push/PR.
+
+## DOM Interaction Gotchas (Auto-Claim Clicking)
+
+From `agentGuidance/guidance/tampermonkey.md`, incorporated here because the auto-claim
+flow drives the site by clicking real controls: offer card → opt-in checkbox → "Claim
+Offer" → back → next card. A click that silently does nothing means offers go unclaimed
+with no error and the loop stalls short of the target, so:
+
+- **Re-query selectors on every iteration; never reuse a node across a click.** Modern
+  frameworks replace DOM nodes on each state update, so an element captured before a click
+  is detached afterwards and subsequent clicks land on a node no longer in the document —
+  no exception, just silence. Add a stall guard: after each click, read the state you
+  expected to change (checkbox `aria-checked`, presence of the "Submitted" button, the
+  remaining card count) and break or retry if it did not move, rather than assuming the
+  click landed.
+- **Prefer `<button>` matches over generic text matches.** A non-interactive wrapper
+  `<div>` or `<span>` carrying the same text usually appears BEFORE the real `<button>` in
+  the DOM, and clicking it does nothing. Query order: `button` elements first (filtered by
+  innerText or aria-label), then `[aria-label*="..."]` for icon-only controls, generic text
+  search last. `runAutoClaimPageLogic()` already follows this — keep new selectors on the
+  same pattern instead of widening to broad `querySelectorAll('div, span')` text scans.
+- **Dismiss cookie/consent banners before interacting.** Consent overlays intercept all
+  pointer events, so clicks on covered elements fail silently. Dismiss them at the start of
+  the flow. If a well-targeted click has no effect, check for an overlay as the first
+  diagnostic, before concluding the site changed its markup.
