@@ -90,3 +90,12 @@ with no error and the loop stalls short of the target, so:
   pointer events, so clicks on covered elements fail silently. Dismiss them at the start of
   the flow. If a well-targeted click has no effect, check for an overlay as the first
   diagnostic, before concluding the site changed its markup.
+
+## Test the Shipped Artifact (audit-28)
+
+From `agentGuidance/guidance/testing.md` (verify the actual artifact, run the real code path, and the "self-authored synthetic test" lesson). Incorporated because the Testing Practices section above points the suite at `core.js`, which is not the file users run.
+
+- **`core.js` is an extraction, not the userscript.** Tampermonkey loads `script.js` as one self-contained file that imports nothing. `core.js` re-declares the constants and rewrites the logic as named exports "extracted from script.js", and `core.test.js` imports only `core.js`. None of the tested functions (`escapeCSV`, `buildCSV`, `sortTags`, `shouldShowCard`, `buildHistoryEntry`, and the rest) exist by name in `script.js`; the shipped code inlines its own copies (for example the `escape` arrow inside the CSV export). A green suite proves the extraction is correct and says nothing about the script installed in the browser.
+- **A change to shared logic or a selector must land in BOTH files in the same commit.** Edit `script.js`, then mirror the same change into `core.js` (or the reverse). A fix that lands only in `core.js` reaches nobody, and the repo looks fixed while every install keeps the bug.
+- **A regression test only counts if it exercises what ships.** When fixing a filter, claim, or history bug, confirm the fix is in `script.js` and that the test's expectation matches the inlined code there, not just the `core.js` version. Prefer a parity check that reads `script.js` as text and asserts the mirrored constants (selectors, storage keys) have the same VALUES as `core.js`, so drift fails the suite instead of hiding inside it. Asserting a symbol is present is not asserting it is correct.
+- **Run the suite from the main checkout, not with a worktree nested inside it.** `vitest.config.js` includes `**/*.test.js`, so a worktree under `.claude/worktrees/` can get its test files collected too, doubling the count. If the baseline looks exactly 2x, that is the cause, not new tests.
